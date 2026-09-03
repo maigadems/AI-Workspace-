@@ -22,6 +22,8 @@ function afficherModule(module) {
         afficherResume();
     } else if (module === "traduction") {
         afficherTraduction();
+    } else if (module === "chat") {
+        afficherChat();
     } else {
         principale.innerHTML = `
             <h2 class="page-titre">Module en construction</h2>
@@ -130,4 +132,80 @@ function afficherTraduction() {
 
 function genererTraductionSimulee(texte, nomLangue, code) {
     return `[${code.toUpperCase()}] ${texte}`;
+}
+
+function afficherChat() {
+    principale.innerHTML = `
+        <h2 class="page-titre">Chat IA</h2>
+        <p class="page-soustitre">Discutez avec l'assistant.</p>
+
+        <div class="carte chat-carte">
+            <div id="chat-fil" class="chat-fil">
+                <div class="chat-message chat-ia">
+                    <span class="chat-auteur">Assistant</span>
+                    <p>Bonjour, comment puis-je vous aider aujourd'hui ?</p>
+                </div>
+            </div>
+
+            <div class="chat-zone-saisie">
+                <input type="text" id="chat-input" class="module-input" placeholder="Écrivez votre message...">
+                <button id="chat-envoyer" class="bouton-primaire">Envoyer</button>
+            </div>
+        </div>
+    `;
+
+    const fil = document.getElementById("chat-fil");
+    const input = document.getElementById("chat-input");
+    const bouton = document.getElementById("chat-envoyer");
+
+    function envoyerMessage() {
+        const contenu = input.value.trim();
+
+        if (contenu === "") {
+            return;
+        }
+
+        ajouterMessage(fil, "user", contenu);
+        input.value = "";
+
+        const messageAttente = ajouterMessage(fil, "ia", "L'assistant écrit...");
+
+        setTimeout(function () {
+            messageAttente.querySelector("p").textContent = genererReponseSimulee(contenu);
+            fil.scrollTop = fil.scrollHeight;
+        }, 700);
+
+        fil.scrollTop = fil.scrollHeight;
+    }
+
+    bouton.addEventListener("click", envoyerMessage);
+
+    input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            envoyerMessage();
+        }
+    });
+}
+
+function ajouterMessage(fil, auteur, texte) {
+    const message = document.createElement("div");
+    message.className = auteur === "user" ? "chat-message chat-user" : "chat-message chat-ia";
+    message.innerHTML = `
+        <span class="chat-auteur">${auteur === "user" ? "Vous" : "Assistant"}</span>
+        <p>${texte}</p>
+    `;
+    fil.appendChild(message);
+    return message;
+}
+
+function genererReponseSimulee(question) {
+    const reponses = [
+        "C'est une bonne question, laissez-moi y réfléchir.",
+        "D'après les informations disponibles, voici ce que je peux vous dire à ce sujet.",
+        "Je peux vous aider avec ça, pouvez-vous préciser un peu plus votre demande ?",
+        "Voici une réponse simulée en attendant la connexion à un vrai modèle."
+    ];
+
+    const index = question.length % reponses.length;
+    return reponses[index];
 }

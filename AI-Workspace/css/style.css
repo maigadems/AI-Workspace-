@@ -348,6 +348,66 @@ ul {
     min-height: 48px;
 }
 
+/* chat */
+
+.chat-carte {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.chat-fil {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.chat-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.chat-auteur {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--texte-clair);
+}
+
+.chat-ia {
+    align-self: flex-start;
+    background: var(--fond);
+}
+
+.chat-user {
+    align-self: flex-end;
+    background: #eff6ff;
+}
+
+.chat-zone-saisie {
+    display: flex;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--bordure);
+}
+
+.chat-zone-saisie .module-input {
+    flex: 1;
+}
+
+.chat-zone-saisie .bouton-primaire {
+    align-self: auto;
+}
+
 /* responsive */
 
 @media (max-width: 1100px) {
