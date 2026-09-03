@@ -20,6 +20,8 @@ function afficherModule(module) {
         principale.innerHTML = dashboardHTML;
     } else if (module === "resume") {
         afficherResume();
+    } else if (module === "traduction") {
+        afficherTraduction();
     } else {
         principale.innerHTML = `
             <h2 class="page-titre">Module en construction</h2>
@@ -75,4 +77,57 @@ function genererResumeSimule(texte) {
 
     const nbPhrases = Math.max(1, Math.ceil(phrases.length / 3));
     return phrases.slice(0, nbPhrases).join(" ");
+}
+
+function afficherTraduction() {
+    principale.innerHTML = `
+        <h2 class="page-titre">Traduction</h2>
+        <p class="page-soustitre">Saisissez un texte et choisissez une langue cible.</p>
+
+        <div class="carte module-carte">
+            <label class="module-label" for="traduction-texte">Texte à traduire</label>
+            <textarea id="traduction-texte" class="module-textarea" rows="6" placeholder="Saisissez votre texte ici..."></textarea>
+
+            <label class="module-label" for="traduction-langue">Langue cible</label>
+            <select id="traduction-langue" class="module-select">
+                <option value="en">Anglais</option>
+                <option value="es">Espagnol</option>
+                <option value="de">Allemand</option>
+                <option value="ar">Arabe</option>
+                <option value="zh">Chinois</option>
+            </select>
+
+            <button id="traduction-bouton" class="bouton-primaire">Traduire</button>
+
+            <div class="module-resultat">
+                <label class="module-label">Traduction</label>
+                <div id="traduction-sortie" class="module-sortie">La traduction apparaîtra ici.</div>
+            </div>
+        </div>
+    `;
+
+    const texte = document.getElementById("traduction-texte");
+    const langue = document.getElementById("traduction-langue");
+    const bouton = document.getElementById("traduction-bouton");
+    const sortie = document.getElementById("traduction-sortie");
+
+    bouton.addEventListener("click", function () {
+        const contenu = texte.value.trim();
+
+        if (contenu === "") {
+            sortie.textContent = "Veuillez saisir un texte avant de traduire.";
+            return;
+        }
+
+        const nomLangue = langue.options[langue.selectedIndex].text;
+        sortie.textContent = "Traduction en cours...";
+
+        setTimeout(function () {
+            sortie.textContent = genererTraductionSimulee(contenu, nomLangue, langue.value);
+        }, 600);
+    });
+}
+
+function genererTraductionSimulee(texte, nomLangue, code) {
+    return `[${code.toUpperCase()}] ${texte}`;
 }
