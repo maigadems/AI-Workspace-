@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workspace</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="entete">
+        <h1 class="entete-titre">AI Workspace</h1>
+        <div class="entete-user">
+            <span>Admin User</span>
+            <span class="chevron">&#8964;</span>
+        </div>
+    </header>
+
+    <div class="conteneur">
+
+        <aside class="sidebar">
+            <div class="sidebar-logo">AI Workspace</div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="#" class="menu-lien actif" data-module="dashboard">Tableau de bord</a></li>
+                    <li><a href="#" class="menu-lien" data-module="chat">Chat</a></li>
+                    <li><a href="#" class="menu-lien" data-module="resume">Résumé de texte</a></li>
+                    <li><a href="#" class="menu-lien" data-module="prediction">Prédiction</a></li>
+                    <li><a href="#" class="menu-lien" data-module="traduction">Traduction</a></li>
+                    <li><a href="#" class="menu-lien" data-module="historique">Historique</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="principale" id="principale">
+
+            <h2 class="page-titre">Tableau de bord</h2>
+            <p class="page-soustitre">Bienvenue sur votre espace de travail intelligent.</p>
+
+            <section class="kpis">
+                <article class="carte kpi">
+                    <p class="kpi-label">Nombre de jeux de données</p>
+                    <p class="kpi-valeur">24</p>
+                    <p class="kpi-variation bleu">+3 ce mois-ci</p>
+                </article>
+                <article class="carte kpi">
+                    <p class="kpi-label">Nombre de requêtes</p>
+                    <p class="kpi-valeur">1,256</p>
+                    <p class="kpi-variation vert">+18% ce mois-ci</p>
+                </article>
+                <article class="carte kpi">
+                    <p class="kpi-label">Nombre de modèles disponibles</p>
+                    <p class="kpi-valeur">12</p>
+                    <p class="kpi-variation violet">+2 ce mois-ci</p>
+                </article>
+                <article class="carte kpi">
+                    <p class="kpi-label">Utilisateurs actifs</p>
+                    <p class="kpi-valeur">8</p>
+                    <p class="kpi-variation orange">+2 ce mois-ci</p>
+                </article>
+                <article class="carte kpi">
+                    <p class="kpi-label">Tâches exécutées</p>
+                    <p class="kpi-valeur">342</p>
+                    <p class="kpi-variation cyan">+22% ce mois-ci</p>
+                </article>
+            </section>
+
+            <section class="graphiques">
+
+                <article class="carte">
+                    <div class="carte-entete">
+                        <h3 class="carte-titre">Requêtes par jour</h3>
+                        <select class="selecteur">
+                            <option>7 derniers jours</option>
+                            <option>30 derniers jours</option>
+                            <option>90 derniers jours</option>
+                        </select>
+                    </div>
+                    <img src="images/courbe-requetes.png" alt="Évolution des requêtes par jour" class="graphique-image">
+                </article>
+
+                <article class="carte">
+                    <div class="carte-entete">
+                        <h3 class="carte-titre">Répartition des requêtes par service</h3>
+                    </div>
+                    <div class="repartition">
+                        <img src="images/donut-services.png" alt="Répartition des requêtes par service" class="graphique-donut">
+                        <ul class="legende">
+                            <li>
+                                <span class="pastille bleu"></span>
+                                <span class="legende-nom">Chat</span>
+                                <span class="legende-valeur">38%</span>
+                            </li>
+                            <li>
+                                <span class="pastille vert"></span>
+                                <span class="legende-nom">Résumé de texte</span>
+                                <span class="legende-valeur">22%</span>
+                            </li>
+                            <li>
+                                <span class="pastille violet"></span>
+                                <span class="legende-nom">Classification</span>
+                                <span class="legende-valeur">18%</span>
+                            </li>
+                            <li>
+                                <span class="pastille orange"></span>
+                                <span class="legende-nom">Traduction</span>
+                                <span class="legende-valeur">12%</span>
+                            </li>
+                            <li>
+                                <span class="pastille cyan"></span>
+                                <span class="legende-nom">Autres</span>
+                                <span class="legende-valeur">10%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+
+            </section>
+
+            <section class="tableaux">
+
+                <article class="carte">
+                    <h3 class="carte-titre">Activité récente</h3>
+                    <table class="tableau">
+                        <thead>
+                            <tr>
+                                <th>Activité</th>
+                                <th>Service</th>
+                                <th>Utilisateur</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Résumé du document_projet.pdf</td>
+                                <td>Résumé de texte</td>
+                                <td>Admin User</td>
+                                <td>21/05/2024 14:32</td>
+                            </tr>
+                            <tr>
+                                <td>Classification de sentiments</td>
+                                <td>Classification</td>
+                                <td>Admin User</td>
+                                <td>21/05/2024 14:21</td>
+                            </tr>
+                            <tr>
+                                <td>Traduction FR &rarr; EN</td>
+                                <td>Traduction</td>
+                                <td>Admin User</td>
+                                <td>21/05/2024 14:15</td>
+                            </tr>
+                            <tr>
+                                <td>Discussion sur l'IA générative</td>
+                                <td>Chat</td>
+                                <td>Admin User</td>
+                                <td>21/05/2024 14:05</td>
+                            </tr>
+                            <tr>
+                                <td>Génération d'idées de projet</td>
+                                <td>Idées</td>
+                                <td>Admin User</td>
+                                <td>21/05/2024 13:50</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="#" class="lien-bas">Voir tout l'historique</a>
+                </article>
+
+                <article class="carte">
+                    <h3 class="carte-titre">Modèles populaires</h3>
+                    <table class="tableau">
+                        <thead>
+                            <tr>
+                                <th>Modèle</th>
+                                <th class="droite">Utilisations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>mistral-7b-instruct</td>
+                                <td class="droite">532</td>
+                            </tr>
+                            <tr>
+                                <td>gpt-4-turbo</td>
+                                <td class="droite">389</td>
+                            </tr>
+                            <tr>
+                                <td>llama-3-8b</td>
+                                <td class="droite">256</td>
+                            </tr>
+                            <tr>
+                                <td>bert-base-uncased</td>
+                                <td class="droite">179</td>
+                            </tr>
+                            <tr>
+                                <td>google-translate-v1</td>
+                                <td class="droite">142</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="#" class="lien-bas">Voir tous les modèles</a>
+                </article>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
