@@ -3,6 +3,27 @@ const liensMenu = document.querySelectorAll(".menu-lien");
 
 const dashboardHTML = principale.innerHTML;
 
+const CLE_HISTORIQUE = "ai-workspace-historique";
+
+function enregistrerHistorique(service, requete, resultat) {
+    const historique = lireHistorique();
+
+    historique.unshift({
+        id: Date.now(),
+        service: service,
+        requete: requete,
+        resultat: resultat,
+        date: new Date().toLocaleString("fr-FR")
+    });
+
+    localStorage.setItem(CLE_HISTORIQUE, JSON.stringify(historique));
+}
+
+function lireHistorique() {
+    const brut = localStorage.getItem(CLE_HISTORIQUE);
+    return brut ? JSON.parse(brut) : [];
+}
+
 liensMenu.forEach(lien => {
     lien.addEventListener("click", function (e) {
         e.preventDefault();
@@ -26,6 +47,8 @@ function afficherModule(module) {
         afficherChat();
     } else if (module === "prediction") {
         afficherPrediction();
+    } else if (module === "historique") {
+        afficherHistorique();
     } else {
         principale.innerHTML = `
             <h2 class="page-titre">Module en construction</h2>
@@ -67,7 +90,9 @@ function afficherResume() {
         sortie.textContent = "Génération du résumé...";
 
         setTimeout(function () {
-            sortie.textContent = genererResumeSimule(contenu);
+            const resultat = genererResumeSimule(contenu);
+            sortie.textContent = resultat;
+            enregistrerHistorique("Résumé de texte", contenu, resultat);
         }, 600);
     });
 }
@@ -127,7 +152,9 @@ function afficherTraduction() {
         sortie.textContent = "Traduction en cours...";
 
         setTimeout(function () {
-            sortie.textContent = genererTraductionSimulee(contenu, nomLangue, langue.value);
+            const resultat = genererTraductionSimulee(contenu, nomLangue, langue.value);
+            sortie.textContent = resultat;
+            enregistrerHistorique("Traduction", contenu, resultat);
         }, 600);
     });
 }
@@ -173,8 +200,10 @@ function afficherChat() {
         const messageAttente = ajouterMessage(fil, "ia", "L'assistant écrit...");
 
         setTimeout(function () {
-            messageAttente.querySelector("p").textContent = genererReponseSimulee(contenu);
+            const reponse = genererReponseSimulee(contenu);
+            messageAttente.querySelector("p").textContent = reponse;
             fil.scrollTop = fil.scrollHeight;
+            enregistrerHistorique("Chat", contenu, reponse);
         }, 700);
 
         fil.scrollTop = fil.scrollHeight;
@@ -251,7 +280,9 @@ function afficherPrediction() {
         sortie.textContent = "Calcul de la prédiction...";
 
         setTimeout(function () {
-            sortie.textContent = genererPredictionFictive(Number(age.value), Number(revenu.value), ville.value.trim());
+            const resultat = genererPredictionFictive(Number(age.value), Number(revenu.value), ville.value.trim());
+            sortie.textContent = resultat;
+            enregistrerHistorique("Prédiction", `âge ${age.value}, revenu ${revenu.value}€, ${ville.value.trim()}`, resultat);
         }, 600);
     });
 }
@@ -261,4 +292,81 @@ function genererPredictionFictive(age, revenu, ville) {
     const categorie = score >= 70 ? "Profil à fort potentiel" : score >= 40 ? "Profil intermédiaire" : "Profil à faible potentiel";
 
     return `${categorie} — score de ${score}/100 pour un profil de ${age} ans à ${ville}.`;
+}
+
+function afficherHistorique() {
+    principale.innerHTML = `
+        <h2 class="page-titre">Historique</h2>
+        <p class="page-soustitre">Retrouvez toutes vos requêtes précédentes.</p>
+
+        <div class="carte historique-carte">
+            <div class="historique-barre">
+                <input type="text" id="historique-recherche" class="module-input" placeholder="Rechercher dans l'historique...">
+                <button id="historique-vider" class="bouton-secondaire">Vider l'historique</button>
+            </div>
+
+            <div id="historique-liste" class="historique-liste"></div>
+        </div>
+    `;
+
+    const recherche = document.getElementById("historique-recherche");
+    const boutonVider = document.getElementById("historique-vider");
+
+    rendreListeHistorique("");
+
+    recherche.addEventListener("input", function () {
+        rendreListeHistorique(recherche.value.trim().toLowerCase());
+    });
+
+    boutonVider.addEventListener("click", function () {
+        if (lireHistorique().length === 0) {
+            return;
+        }
+
+        const confirmation = confirm("Voulez-vous vraiment supprimer tout l'historique ?");
+        if (confirmation) {
+            localStorage.removeItem(CLE_HISTORIQUE);
+            rendreListeHistorique(recherche.value.trim().toLowerCase());
+        }
+    });
+}
+
+function rendreListeHistorique(filtre) {
+    const conteneur = document.getElementById("historique-liste");
+    const historique = lireHistorique();
+
+    const items = filtre
+        ? historique.filter(item =>
+            item.requete.toLowerCase().includes(filtre) ||
+            item.resultat.toLowerCase().includes(filtre) ||
+            item.service.toLowerCase().includes(filtre))
+        : historique;
+
+    if (items.length === 0) {
+        conteneur.innerHTML = `<p class="historique-vide">Aucune requête à afficher.</p>`;
+        return;
+    }
+
+    conteneur.innerHTML = items.map(item => `
+        <div class="historique-item" data-id="${item.id}">
+            <div class="historique-item-entete">
+                <span class="historique-service">${item.service}</span>
+                <span class="historique-date">${item.date}</span>
+            </div>
+            <p class="historique-requete"><strong>Requête :</strong> ${item.requete}</p>
+            <p class="historique-resultat"><strong>Résultat :</strong> ${item.resultat}</p>
+            <button class="historique-supprimer" data-id="${item.id}">Supprimer</button>
+        </div>
+    `).join("");
+
+    conteneur.querySelectorAll(".historique-supprimer").forEach(bouton => {
+        bouton.addEventListener("click", function () {
+            const id = Number(this.dataset.id);
+            const nouvelHistorique = lireHistorique().filter(item => item.id !== id);
+            localStorage.setItem(CLE_HISTORIQUE, JSON.stringify(nouvelHistorique));
+
+            const rechercheInput = document.getElementById("historique-recherche");
+            rendreListeHistorique(rechercheInput.value.trim().toLowerCase());
+        });
+    });
 }
