@@ -24,6 +24,8 @@ function afficherModule(module) {
         afficherTraduction();
     } else if (module === "chat") {
         afficherChat();
+    } else if (module === "prediction") {
+        afficherPrediction();
     } else {
         principale.innerHTML = `
             <h2 class="page-titre">Module en construction</h2>
@@ -208,4 +210,55 @@ function genererReponseSimulee(question) {
 
     const index = question.length % reponses.length;
     return reponses[index];
+}
+
+function afficherPrediction() {
+    principale.innerHTML = `
+        <h2 class="page-titre">Prédiction</h2>
+        <p class="page-soustitre">Renseignez un profil pour obtenir une prédiction.</p>
+
+        <div class="carte module-carte">
+            <label class="module-label" for="pred-age">Âge</label>
+            <input type="number" id="pred-age" class="module-input" placeholder="Ex : 34" min="0">
+
+            <label class="module-label" for="pred-revenu">Revenu mensuel (€)</label>
+            <input type="number" id="pred-revenu" class="module-input" placeholder="Ex : 2500" min="0">
+
+            <label class="module-label" for="pred-ville">Ville</label>
+            <input type="text" id="pred-ville" class="module-input" placeholder="Ex : Paris">
+
+            <button id="pred-bouton" class="bouton-primaire">Prédire</button>
+
+            <div class="module-resultat">
+                <label class="module-label">Résultat de la prédiction</label>
+                <div id="pred-sortie" class="module-sortie">La prédiction apparaîtra ici.</div>
+            </div>
+        </div>
+    `;
+
+    const age = document.getElementById("pred-age");
+    const revenu = document.getElementById("pred-revenu");
+    const ville = document.getElementById("pred-ville");
+    const bouton = document.getElementById("pred-bouton");
+    const sortie = document.getElementById("pred-sortie");
+
+    bouton.addEventListener("click", function () {
+        if (age.value === "" || revenu.value === "" || ville.value.trim() === "") {
+            sortie.textContent = "Veuillez renseigner l'âge, le revenu et la ville.";
+            return;
+        }
+
+        sortie.textContent = "Calcul de la prédiction...";
+
+        setTimeout(function () {
+            sortie.textContent = genererPredictionFictive(Number(age.value), Number(revenu.value), ville.value.trim());
+        }, 600);
+    });
+}
+
+function genererPredictionFictive(age, revenu, ville) {
+    const score = Math.min(99, Math.round((revenu / 100) + (age % 20) + ville.length));
+    const categorie = score >= 70 ? "Profil à fort potentiel" : score >= 40 ? "Profil intermédiaire" : "Profil à faible potentiel";
+
+    return `${categorie} — score de ${score}/100 pour un profil de ${age} ans à ${ville}.`;
 }
